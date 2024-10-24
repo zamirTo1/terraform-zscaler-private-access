@@ -1,0 +1,10 @@
+#  Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+/.idea/
+
+# Mac OS X Finder directory files
+.DS_Store
