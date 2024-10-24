@@ -3,8 +3,8 @@
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >1.8.2 |
-| <a name="requirement_http"></a> [http](#requirement\_http) | >3.4.5 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >1.5    |
+| <a name="requirement_http"></a> [http](#requirement\_http) | >3.4.5  |
 
 ## Providers
 
