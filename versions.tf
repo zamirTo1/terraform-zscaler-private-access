@@ -1,9 +1,9 @@
 terraform {
-  required_version = "1.8.2"
+  required_version = ">=1.5"
   required_providers {
     zpa = {
       source = "zscaler/zpa"
-      version = "3.33.7"
+      version = ">=3.33.7"
     }
     http = {
       source = "hashicorp/http"
