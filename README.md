@@ -78,7 +78,14 @@ This module supports the following:
 
 ### Segment Groups
 ```
-zpa_segment_groups = {
+module "segment_groups" {
+  source  = "zamirTo1/private-access/zscaler"
+  version = "1.0.0"
+  zpa_client_id	= ""
+  zpa_client_secret = ""
+  zpa_customer_id = ""
+  zpa_idp_name = ""
+  zpa_segment_groups = {
     "segment-group-1" = {
         description = "Segment Group 1"
         enabled     = true
@@ -87,73 +94,98 @@ zpa_segment_groups = {
         description = "Segment Group 2"
         enabled     = true
     }  
+  }
 }
 ```
 
 ### Application Segments
 ```
-zpa_application_segment_settings = [
-  {
-    name               = "app-seg-1"
-    domain_names       = ["internal.example.com"]
-    segment_group_name = "segment-group-1"
-    server_groups      = ["server-group-1"]
-    clientless_apps    = [
-      {
-        name                 = "internal.example.com"
-        application_protocol = "HTTPS"
-        application_port     = "443"
-        certificate_name     = "internal.example.com"
-        domain               = "internal.example.com"
-      }
-    ]
-  },
-  {
-    name               = "app-seg-2"
-    domain_names       = ["internal-3.example.com"]
-    segment_group_name = "segment-group-2"
-    server_groups      = ["server-group-1"]
-    tcp_port_range     = ["123", "456-467"]
-  }
-]
+module "application_segment" {
+  source  = "zamirTo1/private-access/zscaler"
+  version = "1.0.0"
+  zpa_client_id	= ""
+  zpa_client_secret = ""
+  zpa_customer_id = ""
+  zpa_idp_name = ""
+  zpa_application_segment_settings = [
+    {
+      name               = "app-seg-1"
+      domain_names       = ["internal.example.com"]
+      segment_group_name = "segment-group-1"
+      server_groups      = ["server-group-1"]
+      clientless_apps    = [
+        {
+          name                 = "internal.example.com"
+          application_protocol = "HTTPS"
+          application_port     = "443"
+          certificate_name     = "internal.example.com"
+          domain               = "internal.example.com"
+        }
+      ]
+    },
+    {
+      name               = "app-seg-2"
+      domain_names       = ["internal-3.example.com"]
+      segment_group_name = "segment-group-2"
+      server_groups      = ["server-group-1"]
+      tcp_port_range     = ["123", "456-467"]
+    }
+  ]
+}
 ```
 
 ### Policy Access Rules
 ```
-zpa_policy_access_rules = {
-  "backend_team" = {
-    description          = "backend team"
-    action               = "ALLOW"
-    applications         = ["app-seg-1"]
+module "policy_access" {
+  source  = "zamirTo1/private-access/zscaler"
+  version = "1.0.0"
+  zpa_client_id	= ""
+  zpa_client_secret = ""
+  zpa_customer_id = ""
+  zpa_idp_name = ""
+  zpa_policy_access_rules = {
+    "backend_team" = {
+      description          = "backend team"
+      action               = "ALLOW"
+      applications         = ["app-seg-1"]
+    }
+    "security_team" = {
+      description          = "Rule 2"
+      action               = "ALLOW"
+      applications         = ["app-seg-*"]
+    }
   }
-  "security_team" = {
-    description          = "Rule 2"
-    action               = "ALLOW"
-    applications         = ["app-seg-*"]
-  }
+  zpa_policy_access_rule_order = ["backend_team", "security_team"]
 }
-zpa_policy_access_rule_order = ["backend_team", "security_team"]
 ```
 
 ### Client Forwarding Policy
 ```
-zpa_client_forwarding_policy_settings = {
-  backend_team_user_bypass = {
-    action = "BYPASS"
-    conditions = {
-      apps  = ["app-seg-1"]
-      users = ["backend-user-1@mydomain.com"]
+module "client_forwarding_policy" {
+  source  = "zamirTo1/private-access/zscaler"
+  version = "1.0.0"
+  zpa_client_id	= ""
+  zpa_client_secret = ""
+  zpa_customer_id = ""
+  zpa_idp_name = ""
+  zpa_client_forwarding_policy_settings = {
+    backend_team_user_bypass = {
+      action = "BYPASS"
+      conditions = {
+        apps  = ["app-seg-1"]
+        users = ["backend-user-1@mydomain.com"]
+      }
+    }
+    backend_team_intercept = {
+      action = "INTERCEPT"
+      conditions = {
+        apps  = ["*app-seg*"]
+        groups = ["backend-team"]
+      }
     }
   }
-  backend_team_intercept = {
-    action = "INTERCEPT"
-    conditions = {
-      apps  = ["*app-seg*"]
-      groups = ["backend-team"]
-    }
-  }
+  zpa_client_forwarding_policy_order = ["backend_team_user_bypass", "backend_team_intercept"]
 }
-zpa_client_forwarding_policy_order = ["backend_team_user_bypass", "backend_team_intercept"]
 ```
 
 ## Future Developments
