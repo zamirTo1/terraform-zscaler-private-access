@@ -22,7 +22,8 @@ This module supports the following:
 
 ## Motivation
 
-Link here
+[Revolutionize your VPN management with one click](https://medium.com/@tomerzamir/revolutionize-your-vpn-management-with-one-click-c0db5ba2b99e)
+
 
 
 ## Requirements
